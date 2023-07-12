@@ -1,0 +1,34 @@
+debug_custom.json:
+
+{
+
+  "servertype": "jlink",
+
+  "device": "RP2040_M0_0",
+
+  "interface": "SWD",
+
+  "serverpath": "C:/Program Files/SEGGER/JLink/JLinkGDBServerCL"
+
+}
+
+
+launch.json:
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  "version": "0.2.0",
+  "configurations": [
+    
+  {
+    "cwd": "${workspaceRoot}",
+    "executable": "./bin/executable.elf",
+    "name": "Debug Microcontroller",
+    "request": "launch",
+    "type": "cortex-debug",
+    "servertype": "jlink",
+    "interface": "SWD",
+    "serverpath": "C:/Program Files/SEGGER/JLink/JLinkGDBServerCL"
+  }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+
+  "servertype": "jlink",
+
+  "device": "RP2040_M0_0",
+
+  "interface": "SWD",
+
+  "serverpath": "C:/Program Files/SEGGER/JLink/JLinkGDBServerCL"
+
+}
