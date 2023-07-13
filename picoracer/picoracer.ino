@@ -233,7 +233,7 @@ void loop() {
       v_theta = v_theta_start;
     }
 
-    zoom = (defaultzoom / (v / 5. + 1.));
+    zoom = (defaultzoom / (v / 8. + 1.)); // 10
 
     // rendering
     if (mode7 == 0)
@@ -270,11 +270,14 @@ void loop() {
                 tiles_data,
                 BLIT_NO_ALPHA,
                 fb_back);
+
       #if LCD_COLORDEPTH == 16
-        blit_buf(tm_x + tm_w / 2, tm_y + tm_h / 2, zoom / 2, v_theta * M_PI / 180, 0xf81f, car_data, fb_back);
+        color_t alpha = 0xf81f;
       #elif LCD_COLORDEPTH == 8
-        blit_buf(tm_x + tm_w / 2, tm_y + tm_h / 2, zoom / 2, v_theta * M_PI / 180, 0xe3, car_data, fb_back);
+        color_t alpha = 0xe2;
       #endif
+
+      blit_buf(tm_x + tm_w / 2, tm_y + tm_h / 2, zoom / 2, v_theta * M_PI / 180, alpha, car_data, fb_back);
     }
 
     if ((mode7 == 0) || (mode7 == 2)) {
@@ -310,7 +313,7 @@ void loop() {
       #if LCD_COLORDEPTH == 16
         color_t alpha = 0xf81f;
       #elif LCD_COLORDEPTH == 8
-        color_t alpha = 0xe3;
+        color_t alpha = 0xe2;
       #endif
       
       blit_buf(tm_x + tm_w / 2, tm_y + tm_h / 2, zoom / 2, M_PI, alpha, car_data, fb_back);
@@ -351,7 +354,7 @@ void loop() {
       #if LCD_COLORDEPTH == 16
         color_t sky_color = rgb_col_888_565(0, 128, 180);
       #elif LCD_COLORDEPTH == 8
-        color_t sky_color = rgb_col_888_332(0, 128, 180);
+        color_t sky_color = 0xe2; // blue in palette
       #endif
       
       draw_fill_rect(tm_x, tm_y, tm_x + tm_w - 1, tm_y + (sky_height + 4) / a, sky_color, fb_back);
