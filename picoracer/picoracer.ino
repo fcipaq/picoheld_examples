@@ -277,7 +277,7 @@ void loop() {
         color_t alpha = 0xe2;
       #endif
 
-      blit_buf(tm_x + tm_w / 2, tm_y + tm_h / 2, zoom / 2, v_theta * M_PI / 180, alpha, car_data, fb_back);
+      blit_buf(tm_x + tm_w / 2, tm_y + tm_h / 2, zoom / 2, (v_theta + 180) * M_PI / 180, alpha, car_data, fb_back);
     }
 
     if ((mode7 == 0) || (mode7 == 2)) {
@@ -316,7 +316,7 @@ void loop() {
         color_t alpha = 0xe2;
       #endif
       
-      blit_buf(tm_x + tm_w / 2, tm_y + tm_h / 2, zoom / 2, M_PI, alpha, car_data, fb_back);
+      blit_buf(tm_x + tm_w / 2, tm_y + tm_h / 2, zoom / 2, 0, alpha, car_data, fb_back);
 
     }
 
