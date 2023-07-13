@@ -6,7 +6,12 @@ You can find some examples here for the *Pico Hero* library *pplib*. The example
 
 This examples demonstrates how to use the blitter in order to blit graphics buffers. You should see some rotating, zooming and stretched smileys on the screen.
 
+
+![Blitter demo image](images/blitter.jpg)
+
 ## Pico Racer
 
 Pico Racer is a top down/"Mode 7" sytle racing "game" demonstrating the library's different tile mapping capabilities.  
+
+![Pico racer image](images/picoracer.jpg)
 
