@@ -1,6 +1,7 @@
 /*
  * Pico Racer example for the Pico Hero pplib
  *
+  
  * Copyright (C) 2023 Daniel Kammer (daniel.kammer@web.de)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -143,7 +144,7 @@ void loop() {
   uint8_t b1_deb = 0;  // button debounce
 
   while (1) {
-    draw_fill_rect(0, 0, lcd_get_screen_width() - 1, lcd_get_screen_height() - 1, 0x00, fb_back);
+    draw_rect_fill(0, 0, lcd_get_screen_width() - 1, lcd_get_screen_height() - 1, 0x00, fb_back);
 
     // controls
     uint16_t dpad = getDPad();
@@ -377,7 +378,7 @@ void loop() {
         color_t sky_color = 0xe2; // blue in palette
       #endif
       
-      draw_fill_rect(tm_x, tm_y, tm_x + tm_w - 1, tm_y + (sky_height + 4) / a, sky_color, fb_back);
+      draw_rect_fill(tm_x, tm_y, tm_x + tm_w - 1, tm_y + (sky_height + 4) / a, sky_color, fb_back);
 
       #if LCD_COLORDEPTH == 16
         color_t alpha = 0xf81f;
@@ -398,8 +399,8 @@ void loop() {
           color_t col = rgb_col_888_332(255, 255, 255);
         #endif
 
-        draw_fill_rect(lcd_get_screen_width() / 2 - 1, 0, lcd_get_screen_width() / 2 + 1, lcd_get_screen_height(), col, fb_back);
-        draw_fill_rect(0, lcd_get_screen_height() / 2 - 1, lcd_get_screen_width(), lcd_get_screen_height() / 2 + 1, col, fb_back);
+        draw_rect_fill(lcd_get_screen_width() / 2 - 1, 0, lcd_get_screen_width() / 2 + 1, lcd_get_screen_height(), col, fb_back);
+        draw_rect_fill(0, lcd_get_screen_height() / 2 - 1, lcd_get_screen_width(), lcd_get_screen_height() / 2 + 1, col, fb_back);
       }
     
     }

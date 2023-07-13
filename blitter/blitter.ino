@@ -133,7 +133,7 @@ void loop() {
   
   while (1) {
 
-    draw_fill_rect(0, 0, lcd_get_screen_width() - 1, lcd_get_screen_width() - 1, 0xff, fb_back);
+    draw_rect_fill(0, 0, lcd_get_screen_width() - 1, lcd_get_screen_width() - 1, 0xff, fb_back);
 
     for (int h = 0; h < num_sprites / 2; h++) {
       // smiley 1 (the rotating, laughing one)
