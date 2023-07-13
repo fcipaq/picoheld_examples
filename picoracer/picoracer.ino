@@ -56,7 +56,7 @@
 #endif
 
 /* ====================== variables ====================== */
-uint8_t tile_factor = tiles_data.width / 64;  // normalize to 8 by 8 tile size
+uint8_t tile_factor = tiles_data.width / 64;  // normalize
 
 bool double_buffering = false;
 
@@ -147,8 +147,8 @@ void loop() {
     draw_rect_fill(0, 0, lcd_get_screen_width() - 1, lcd_get_screen_height() - 1, 0x00, fb_back);
 
     // controls
-    uint16_t dpad = getDPad();
-    uint16_t buttons = getButtons();
+    uint16_t dpad = ctrl_dpad_state();
+    uint16_t buttons = ctrl_button_state();
 
     if ((buttons & BUTTON_1) && (buttons & BUTTON_2) && (buttons & BUTTON_3)) {
       #ifdef MUSIC
