@@ -1,3 +1,24 @@
+/*
+ * Pico Racer example for the PicoPal pplib library
+ *
+  
+ * Copyright (C) 2023 Daniel Kammer (daniel.kammer@web.de)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+ 
 uint32_t snd_motor_idle_len = 62551;
 const uint8_t snd_motor_idle[] PROGMEM = {  
 0x52, 0x49, 0x46, 0x46, 0xF0, 0xF4, 0x00, 0x00, 0x57, 0x41, 0x56, 0x45, 0x66, 0x6D, 0x74, 0x72, 

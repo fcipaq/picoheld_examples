@@ -1,5 +1,5 @@
 /*
- * Blitter example for the Pico Hero pplib
+ * Blitter example for the PicoPal pplib library
  *
  * Copyright (C) 2023 Daniel Kammer (daniel.kammer@web.de)
  *

@@ -1,5 +1,5 @@
 /*
- * Pico Racer example for the Pico Hero pplib
+ * Pico Racer example for the PicoPal pplib library
  *
   
  * Copyright (C) 2023 Daniel Kammer (daniel.kammer@web.de)
@@ -52,7 +52,6 @@
   #include "assets/snd_low_grip.h"
   #include "assets/snd_motor_accel.h"
   #include "assets/snd_motor_idle.h"
-  uint8_t music_on = 0;
 #endif
 
 /* ====================== variables ====================== */
@@ -91,7 +90,7 @@ void setup() {
     lcd_set_speed(LCD_PIO_SPEED * 1000000);
   }
 
-  lcd_set_backlight(10);
+  lcd_set_backlight(40);
   snd_set_vol(5);
   snd_set_freq(44000);
 }
@@ -150,52 +149,35 @@ void loop() {
     uint16_t dpad = ctrl_dpad_state();
     uint16_t buttons = ctrl_button_state();
 
-    if ((buttons & BUTTON_1) && (buttons & BUTTON_2) && (buttons & BUTTON_3)) {
+    if (buttons & BUTTON_1) {
+      if (!b1_deb) {
+        b1_deb = 1;
+        mode7++;
+        if (mode7 == 4)
+          mode7 = 0;
+      }
+    } else {
+      b1_deb = 0;
+    }
+
+    if (buttons & BUTTON_3) {
+      v += a;
+      if (v > v_max)
+        v = v_max;
       #ifdef MUSIC
-        if (!b1_deb) {
-          b1_deb = 1;
-          if (music_on)
-            music_on = 0;
+        if (snd_num_bufs_waiting(SND_CHAN_2) == 0) {
+          if (v < v_max / 2)
+            snd_enque_buf((uint8_t*)snd_motor_accel, snd_motor_accel_len, SND_CHAN_2, SND_NONBLOCKING);
           else
-            music_on = 1;
-        } else {
-          b1_deb = 0;
+            snd_enque_buf((uint8_t*)snd_motor_idle, snd_motor_idle_len, SND_CHAN_2, SND_NONBLOCKING);
         }
       #endif
-    } else {
+    }
 
-      if (buttons & BUTTON_1) {
-        if (!b1_deb) {
-          b1_deb = 1;
-          mode7++;
-          if (mode7 == 4)
-            mode7 = 0;
-        }
-      } else {
-        b1_deb = 0;
-      }
-
-      if (buttons & BUTTON_3) {
-        v += a;
-        if (v > v_max)
-          v = v_max;
-        #ifdef MUSIC
-        if (music_on) {
-          if (snd_num_bufs_waiting(SND_CHAN_2) == 0) {
-            if (v < v_max / 2)
-              snd_enque_buf((uint8_t*)snd_motor_accel, snd_motor_accel_len, SND_CHAN_2, SND_NONBLOCKING);
-            else
-              snd_enque_buf((uint8_t*)snd_motor_idle, snd_motor_idle_len, SND_CHAN_2, SND_NONBLOCKING);
-          }
-        }
-        #endif
-      }
-
-      if (buttons & BUTTON_2) {
-        v += b;
-        if (v < 0)
-          v = 0;
-      }
+    if (buttons & BUTTON_2) {
+      v += b;
+      if (v < 0)
+        v = 0;
     }
 
     if (!buttons) {
@@ -228,10 +210,8 @@ void loop() {
       v_theta_delta = 0;
 
     #ifdef MUSIC
-      if (music_on) {
-        if ((v_theta_delta == 50) && (snd_num_bufs_waiting(SND_CHAN_1) == 0))
-          snd_enque_buf((uint8_t*)snd_low_grip, snd_low_grip_len, SND_CHAN_1, SND_NONBLOCKING);
-      }
+      if ((v_theta_delta == 50) && (snd_num_bufs_waiting(SND_CHAN_1) == 0))
+        snd_enque_buf((uint8_t*)snd_low_grip, snd_low_grip_len, SND_CHAN_1, SND_NONBLOCKING);
     #endif
 
     if (v_theta > 360)
@@ -419,8 +399,10 @@ void loop() {
     font_write_string(9, 9, 0x0000, debug_print, (font_t*) font_13x16, fb_back);
 
     #ifdef MUSIC
-      if (music_on)
-        snd_enque_buf((uint8_t*)snd_data, snd_file_len, SND_CHAN_0, SND_NONBLOCKING);
+      snd_enque_buf((uint8_t*)snd_data, snd_file_len, SND_CHAN_0, SND_NONBLOCKING);
+      snd_enque_buf((uint8_t*)snd_data, snd_file_len, SND_CHAN_1, SND_NONBLOCKING);
+      snd_enque_buf((uint8_t*)snd_data, snd_file_len, SND_CHAN_2, SND_NONBLOCKING);
+      snd_enque_buf((uint8_t*)snd_data, snd_file_len, SND_CHAN_3, SND_NONBLOCKING);
     #endif
  
     // vsync
