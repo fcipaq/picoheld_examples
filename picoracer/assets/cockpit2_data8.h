@@ -1,5 +1,5 @@
 /*
- * Pico Racer example for the PicoPal pplib library
+ * Pico Racer example for the Pico Held pplib library
  *
   
  * Copyright (C) 2023 Daniel Kammer (daniel.kammer@web.de)
