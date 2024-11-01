@@ -19,9 +19,9 @@
  */
  
 #include <pplib.h>
+#include <graphics/blitter.h>
 
-#include <fonts/f13x16.h>
-#include "lcdcom.h"
+#include <fonts/fontfiles/f13x16.h>
 
 #include <stdlib.h>  // itoa()
 
@@ -33,6 +33,8 @@
 #if LCD_COLORDEPTH!=8
 #error Color depth needs to be 8 bits. Please set in setup.h
 #endif
+
+#define TRANSPARENT_COLOR (0xcd)
 
 /* ==================== types ==================== */
 
@@ -88,13 +90,13 @@ void loop() {
   
   // prepare framebuffer
   gbuffer_t fb_back;
-  if (gbuf_alloc(&fb_back, lcd_get_screen_width(), lcd_get_screen_height(), LCD_COLORDEPTH) != BUF_SUCCESS)
+  if (gbuf_alloc(&fb_back, lcd_get_screen_width(), lcd_get_screen_height()) != BUF_SUCCESS)
     blink_error(2);
 
   // If there's enough memory, enable double buffering
   gbuffer_t fb1;
   bool double_buffering = false;
-  if (gbuf_alloc(&fb1, lcd_get_screen_width(), lcd_get_screen_height(), LCD_COLORDEPTH) == BUF_SUCCESS)
+  if (gbuf_alloc(&fb1, lcd_get_screen_width(), lcd_get_screen_height()) == BUF_SUCCESS)
     double_buffering = true;
   
   gbuffer_t fb2 = fb_back;
@@ -154,7 +156,13 @@ void loop() {
         smiley[0][h].r -= 360;
 
       // rotation
-      blit_buf(smiley[0][h].x, smiley[0][h].y, (float) smiley[0][h].z / 300., smiley[0][h].r * M_PI / 180, 0xcd, smiley_data, fb_back);
+      blit_buf(smiley[0][h].x,
+               smiley[0][h].y,
+               (float) smiley[0][h].z / 300.,
+               smiley[0][h].r * M_PI / 180,
+               TRANSPARENT_COLOR,
+               smiley_data,
+               fb_back);
 
       // smiley 2 (the other one being stretched)
       if ((smiley[1][h].x < 0) || smiley[1][h].x > lcd_get_screen_width() - 1)
@@ -172,7 +180,14 @@ void loop() {
       smiley[1][h].zy += smiley[1][h].dzy;
 
       // x/y-zooming
-      blit_buf(smiley[1][h].x, smiley[1][h].y, (float) smiley[1][h].zx / 500., (float) smiley[1][h].zy / 500., BLIT_FLIP_NONE, 0xcd, smiley2_data, fb_back);
+      blit_buf(smiley[1][h].x,
+               smiley[1][h].y,
+               (float) smiley[1][h].zx / 500.,
+               (float) smiley[1][h].zy / 500.,
+               BLIT_FLIP_NONE,
+               TRANSPARENT_COLOR,
+               smiley2_data,
+               fb_back);
     }
 
     // frame rate counter

@@ -22,8 +22,8 @@
 #pragma GCC optimize("Ofast")
 
 #include <pplib.h>
+#include <fonts/fontfiles/f13x16.h>
 
-#include <fonts/f13x16.h>
 #include "pico/stdlib.h" // overclock
 #include "hardware/vreg.h" // overclock
 
@@ -81,7 +81,7 @@ void setup() {
   if (ppl_init() != 0)
     blink_error(1);
 
-  uint32_t sys_clock_khz = 133000; //276000; //252000; //133000
+  uint32_t sys_clock_khz = 252000; //276000, 252000, 133000
   if (sys_clock_khz != 133000) {
     vreg_set_voltage(VREG_VOLTAGE_1_20);
     sleep_ms(10);
@@ -107,13 +107,13 @@ void loop() {
 
   // prepare framebuffer
   gbuffer_t fb_back;
-  if (gbuf_alloc(&fb_back, lcd_get_screen_width(), lcd_get_screen_height(), LCD_COLORDEPTH) != BUF_SUCCESS)
+  if (gbuf_alloc(&fb_back, lcd_get_screen_width(), lcd_get_screen_height()) != BUF_SUCCESS)
     blink_error(2);
 
   // If there's enough memory, enable double buffering
   gbuffer_t fb1;
 
-  if (gbuf_alloc(&fb1, lcd_get_screen_width(), lcd_get_screen_height(), LCD_COLORDEPTH) == BUF_SUCCESS)
+  if (gbuf_alloc(&fb1, lcd_get_screen_width(), lcd_get_screen_height()) == BUF_SUCCESS)
     double_buffering = true;
 
   gbuffer_t fb2 = fb_back;
@@ -143,7 +143,12 @@ void loop() {
   uint8_t b1_deb = 0;  // button debounce
 
   while (1) {
-    draw_rect_fill(0, 0, lcd_get_screen_width() - 1, lcd_get_screen_height() - 1, 0x00, fb_back);
+    draw_rect_fill(0,
+                   0, 
+                   lcd_get_screen_width() - 1,
+                   lcd_get_screen_height() - 1,
+                   0x00,
+                   fb_back);
 
     // controls
     uint16_t dpad = ctrl_dpad_state();
@@ -167,9 +172,9 @@ void loop() {
       #ifdef MUSIC
         if (snd_num_bufs_waiting(SND_CHAN_2) == 0) {
           if (v < v_max / 2)
-            snd_enque_buf((uint8_t*)snd_motor_accel, snd_motor_accel_len, SND_CHAN_2, SND_NONBLOCKING);
+            snd_enque_buf((uint8_t*) snd_motor_accel, snd_motor_accel_len, SND_CHAN_2, SND_NONBLOCKING);
           else
-            snd_enque_buf((uint8_t*)snd_motor_idle, snd_motor_idle_len, SND_CHAN_2, SND_NONBLOCKING);
+            snd_enque_buf((uint8_t*) snd_motor_idle, snd_motor_idle_len, SND_CHAN_2, SND_NONBLOCKING);
         }
       #endif
     }
@@ -240,10 +245,10 @@ void loop() {
     if (mode7 == 0)
       zoom /= 2;
 
-    uint16_t tm_x;
-    uint16_t tm_y;
-    uint16_t tm_w;
-    uint16_t tm_h;
+    coord_t tm_x;
+    coord_t tm_y;
+    coord_t tm_w;
+    coord_t tm_h;
 
     if ((mode7 == 0) || (mode7 == 1)) {
       // top down view (car rotating)
@@ -278,7 +283,13 @@ void loop() {
         color_t alpha = 0xe2;
       #endif
 
-      blit_buf(tm_x + tm_w / 2, tm_y + tm_h / 2, zoom / 2, (v_theta + 180) * M_PI / 180, alpha, car_data, fb_back);
+      blit_buf(tm_x + tm_w / 2,
+               tm_y + tm_h / 2,
+               zoom / 2,
+               (v_theta + 180) * M_PI / 180,
+               alpha,
+               car_data,
+               fb_back);
     }
 
     if ((mode7 == 0) || (mode7 == 2)) {
@@ -317,7 +328,12 @@ void loop() {
         color_t alpha = 0xe2;
       #endif
       
-      blit_buf(tm_x + tm_w / 2, tm_y + tm_h / 2, zoom / 2, 0, alpha, car_data, fb_back);
+      blit_buf(tm_x + tm_w / 2,
+               tm_y + tm_h / 2,
+               zoom / 2, 0,
+               alpha,
+               car_data,
+               fb_back);
 
     }
 
@@ -358,7 +374,12 @@ void loop() {
         color_t sky_color = 0xe2; // blue in palette
       #endif
       
-      draw_rect_fill(tm_x, tm_y, tm_x + tm_w - 1, tm_y + (sky_height + 4) / a, sky_color, fb_back);
+      draw_rect_fill(tm_x,
+                     tm_y,
+                     tm_x + tm_w - 1,
+                     tm_y + (sky_height + 4) / a,
+                     sky_color,
+                     fb_back);
 
       #if LCD_COLORDEPTH == 16
         color_t alpha = 0xf81f;
@@ -367,8 +388,16 @@ void loop() {
       #endif
 
       if (mode7 == 3) {
-        blit_buf(0, 0, alpha, cockpit2_data, fb_back);
-        blit_buf(0, 171, alpha, cockpit1_data, fb_back);
+        blit_buf(0,
+                 0,
+                 alpha,
+                 cockpit2_data,
+                 fb_back);
+        blit_buf(0,
+                 171,
+                 alpha,
+                 cockpit1_data,
+                 fb_back);
       }
 
       if (mode7 == 0) {
@@ -379,8 +408,19 @@ void loop() {
           color_t col = rgb_col_888_332(255, 255, 255);
         #endif
 
-        draw_rect_fill(lcd_get_screen_width() / 2 - 1, 0, lcd_get_screen_width() / 2 + 1, lcd_get_screen_height(), col, fb_back);
-        draw_rect_fill(0, lcd_get_screen_height() / 2 - 1, lcd_get_screen_width(), lcd_get_screen_height() / 2 + 1, col, fb_back);
+        draw_rect_fill(lcd_get_screen_width() / 2 - 1,
+                       0,
+                       lcd_get_screen_width() / 2 + 1,
+                       lcd_get_screen_height(),
+                       col,
+                       fb_back);
+
+        draw_rect_fill(0,
+                       lcd_get_screen_height() / 2 - 1,
+                       lcd_get_screen_width(),
+                       lcd_get_screen_height() / 2 + 1,
+                       col,
+                       fb_back);
       }
     
     }
@@ -400,9 +440,6 @@ void loop() {
 
     #ifdef MUSIC
       snd_enque_buf((uint8_t*)snd_data, snd_file_len, SND_CHAN_0, SND_NONBLOCKING);
-      snd_enque_buf((uint8_t*)snd_data, snd_file_len, SND_CHAN_1, SND_NONBLOCKING);
-      snd_enque_buf((uint8_t*)snd_data, snd_file_len, SND_CHAN_2, SND_NONBLOCKING);
-      snd_enque_buf((uint8_t*)snd_data, snd_file_len, SND_CHAN_3, SND_NONBLOCKING);
     #endif
  
     // vsync
